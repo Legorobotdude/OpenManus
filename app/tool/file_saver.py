@@ -1,8 +1,10 @@
 import os
+from pathlib import Path
 
 import aiofiles
 
 from app.tool.base import BaseTool
+from app.config import WORKSPACE_ROOT
 
 
 class FileSaver(BaseTool):
@@ -45,6 +47,10 @@ The tool accepts content and a file path, and saves the content to that location
             str: A message indicating the result of the operation.
         """
         try:
+            # Convert to absolute path if relative
+            if not os.path.isabs(file_path):
+                file_path = os.path.join(WORKSPACE_ROOT, file_path)
+            
             # Ensure the directory exists
             directory = os.path.dirname(file_path)
             if directory and not os.path.exists(directory):
